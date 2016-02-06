@@ -1,0 +1,41 @@
+.head{
+	width: 90%;
+	margin: 0px auto;
+	text-align: center;
+}
+ul{
+	list-style: none;
+}
+ul a{
+	text-decoration: none;
+}
+.logo{
+	float: left;
+}
+.login{
+	float: right;
+	width: 300px;
+	overflow: hidden;
+}
+.userlogin{
+	float: left;
+}
+.register{
+	float: right;
+}
+.ask{
+	float: left;
+	margin-right: 12px;
+}
+.wraper{
+	width: 90%;
+	margin: 0px auto;
+	margin-top: 5%;
+}
+.question{
+	padding: 5px;
+}
+footer{
+	text-align: center;
+	margin-top: 3%;
+}
