@@ -18,6 +18,7 @@
 				if($row["password"] == $password){
 					echo "Valid user";
 					$_SESSION["username"] = $row["username"];
+					$_SESSION["id"] = $row["id"];
 					header("Location:index.php");
 				}
 				else{

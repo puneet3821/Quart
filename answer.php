@@ -1,6 +1,5 @@
 <?php
-	session_start();
-
+	include 'checkUser.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,7 +64,6 @@
 		</header>
 		<div class="w3-container q">
 		<?php
-			include 'checkUser.php';
 			$question_id = $_GET["id"];
 			$_SESSION["questionId"] = $question_id;
 			include 'opendb.php';
@@ -74,14 +72,18 @@
 			if($result){
 				while($row = mysql_fetch_array($result)){
 					echo '<div class="w3-card" style="width: 96%; margin: 10px auto;">';
-					echo '<a href="#"><h3 class="question">';
+					$href = " href = 'answer.php?id=".$question_id ."'";
+					echo '<a '.$href.'><h3 class="question">';
 					echo $row["question"].'</h3></a>';
-					echo '<p><span>upvote '.$row["upvote"];
+					echo '<p><span>upvote '.$row["upvote"]."<span>";
+					echo '<span> downvote '.$row["downvote"]."</span>";
 						if($row["anonymous"] == 1)
 							$user_asked = "anonymous";
 						else
 							$user_asked = $row["user_asked"];
-						echo '</span><span> Asked By - '.$user_asked.'</span></p>';
+						echo '<span> Asked By - '.$user_asked.'</span></p>';
+						echo "<button id='question-". $row["question_id"]. "' class='upvote'>Up</button>";
+						echo "<button id='question-". $row["question_id"]. "' class='downvote'>Down</button>";
 						echo '</div></div>';
 				}
 			}
@@ -91,7 +93,7 @@
 			<h2>Answers</h2>
 		</header>
 		<?php
-			$sql = "SELECT * FROM quart_answers WHERE question_id='$question_id'";
+			$sql = "SELECT * FROM quart_answers WHERE question_id='$question_id' ORDER BY upvote DESC";
 			$result = mysql_query($sql);
 			if($result){
 				while($row = mysql_fetch_array($result)){
@@ -99,12 +101,15 @@
 					echo '<h3 class="question">';
 					echo $row["answer"];
 					echo '</h3></a>';
-					echo '<p><span>upvote '.$row["upvote"];
+					echo '<p><span>upvote '.$row["upvote"]."</span>";
+					echo '<span> downvote '.$row["downvote"]."</span>";
 					if($row["anonymous"] == 1)
 							$user_answered = "anonymous";
 						else
 							$user_answered = $row["user_answered"];
-					echo '</span><span> Answered By - '.$user_answered.'</span></p>';
+					echo '<span> Answered By - '.$user_answered.'</span></p>';
+					echo "<button id='answer-". $row["answer_id"]. "' class='upvote'>Up</button>";
+					echo "<button id='answer-". $row["answer_id"]. "' class='downvote'>Down</button>";
 					echo '</div>';
 				}
 			}
@@ -188,6 +193,39 @@
 	    $(".q > div").mouseout(function(){
 	        $( this ).removeClass("w3-card-2");
 	    });
+	    $(".upvote").click(function(){
+		var id = $(this).attr('id');
+		var arr = id.split("-");
+		$.ajax({
+	            url: "upvote.php", 
+	            type: "POST", //can be post or get
+	            data: {type: arr[0],id: arr[1]}, 
+	            success: function(response){
+	            	if(Boolean(response)){
+	            		alert(response);
+	            	}else{
+	            		location.reload();
+	            	}
+	            }
+	        });
+		});
+
+		$(".downvote").click(function(){
+			var id = $(this).attr('id');
+			var arr = id.split("-");
+			$.ajax({
+	            url: "downvote.php", 
+	            type: "POST", //can be post or get
+	            data: {type: arr[0],id: arr[1]}, 
+	            success: function(response){
+	            	if(Boolean(response)){
+	            		alert(response);
+	            	}else{
+	            		location.reload();
+	            	}
+	            }
+	        });	
+		});
 });
 </script>
 

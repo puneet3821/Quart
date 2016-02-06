@@ -18,6 +18,7 @@
 		$result = mysql_query($sql);
 		if($result){
 			echo "Question posted";
+			header("Location:index.php");
 		}
 		else{
 			echo "Question not posted. Try again";

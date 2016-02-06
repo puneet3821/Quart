@@ -1,6 +1,5 @@
 <?php
 	session_start();
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,10 +15,10 @@
 
 
 	<div class="w3-card-4" style="width:100%;">
- 		
 		<header class="w3-container w3-blue">
 		<div class="head">
-		  <h1 class="logo">Quart</h1>
+		<a href="index.php">
+		  <h1 class="logo">Quart</h1></a>
 		  <?php
 		  	if(isset($_SESSION["loginError"])){
 	 		if(!isset($_SESSION["username"]))
@@ -76,12 +75,13 @@
 						echo "<a".$href.">";
 						echo '<h3 class="question">'.$row["question"]. "</h3>";
 						echo "</a>";
-						echo '<p><span>upvote '.$row["upvote"];
+						echo '<p><span>upvote '.$row["upvote"]."</span>";
+						echo '<span> downvote '.$row["downvote"]."</span>";
 						if($row["anonymous"] == 1)
 							$user_asked = "anonymous";
 						else
 							$user_asked = $row["user_asked"];
-						echo '</span><span> Asked By - '.$user_asked.'</span></p>';
+						echo '<span> Asked By - '.$user_asked.'</span></p>';
 			
 						
 						echo "<button id='question-". $row["question_id"]. "' class='upvote'>Up</button>";
@@ -159,6 +159,39 @@
 	    $(".q > div").mouseout(function(){
 	        $( this ).removeClass("w3-card-2");
 	    });
+	    $(".upvote").click(function(){
+		var id = $(this).attr('id');
+		var arr = id.split("-");
+		$.ajax({
+	            url: "upvote.php", 
+	            type: "POST", //can be post or get
+	            data: {type: arr[0],id: arr[1]}, 
+	            success: function(response){
+	            	if(Boolean(response)){
+	            		alert(response);
+	            	}else{
+	            		location.reload();
+	            	}
+	            }
+	        });
+		});
+
+		$(".downvote").click(function(){
+			var id = $(this).attr('id');
+			var arr = id.split("-");
+			$.ajax({
+	            url: "downvote.php", 
+	            type: "POST", //can be post or get
+	            data: {type: arr[0],id: arr[1]}, 
+	            success: function(response){
+	            	if(Boolean(response)){
+	            		alert(response);
+	            	}else{
+	            		location.reload();
+	            	}
+	            }
+	        });
+		});
 });
 </script>
 
