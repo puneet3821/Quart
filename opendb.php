@@ -1,7 +1,7 @@
 <?php
 	$servername = "localhost";
-	$username = "root";
-	$password = "MySql";
+	$username = "username";
+	$password = "password";
 	$con = mysql_connect($servername,$username,$password);
 	if(!$con){
 		die(mysql_error());
